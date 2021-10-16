@@ -7,7 +7,7 @@ void main() {
 }
 
 class UniClima extends StatelessWidget {
-  const UniClima({ Key? key }) : super(key: key);
+  const UniClima({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
