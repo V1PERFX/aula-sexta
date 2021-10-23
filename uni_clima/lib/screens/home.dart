@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -40,6 +42,23 @@ class _HomeState extends State<Home> {
   ];
 
   String _cidadeSelecionada = "UniClima";
+
+  carregaClima() async {
+    const String _apiURL = "api.openweathermap.org";
+    const String _path = "/data/2.5/weather";
+    const String _appid = "chaveApiAqui";
+    const String _units = "metric";
+    const String _lang = "pt_br";
+
+    final _parametros = {
+      "q": _cidadeSelecionada,
+      "appid": _appid,
+      "units": _units,
+      "lang": _lang
+    };
+
+    final tempoResponse = await http.get(Uri.https(_apiURL, _path, _parametros));
+  }
 
   @override
   Widget build(BuildContext context) {
