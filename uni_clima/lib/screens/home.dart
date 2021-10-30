@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:uni_clima/model/clima_model.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -11,6 +12,9 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+
+  late ClimaModel climaModel;
+
   final List<String> _cidades = [
     "Aracaju",
     "Belém",
@@ -46,7 +50,7 @@ class _HomeState extends State<Home> {
   carregaClima() async {
     const String _apiURL = "api.openweathermap.org";
     const String _path = "/data/2.5/weather";
-    const String _appid = "chaveApiAqui";
+    const String _appid = ""; //CHAVE DA API
     const String _units = "metric";
     const String _lang = "pt_br";
 
@@ -58,6 +62,13 @@ class _HomeState extends State<Home> {
     };
 
     final tempoResponse = await http.get(Uri.https(_apiURL, _path, _parametros));
+
+    //Para fins de depuração
+    //print("URL Montada" + tempoResponse.request!.url.toString());
+
+    if(tempoResponse.statusCode == 200) {
+      climaModel = ClimaModel.fromJson(jsonDecode(tempoResponse.body));
+    }
   }
 
   @override
@@ -78,10 +89,11 @@ class _HomeState extends State<Home> {
               showSelectedItems: true,
               items: _cidades,
               showSearchBox: true,
-              maxHeight: height - padding.top - padding.bottom - 25,
+              maxHeight: height - padding.top - padding.bottom - 56,
               onChanged: (value) {
                 setState(() {
                   _cidadeSelecionada = value!;
+                  carregaClima();
                 });
               },
             ),
